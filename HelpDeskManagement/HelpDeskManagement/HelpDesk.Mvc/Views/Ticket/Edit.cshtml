@@ -1,0 +1,47 @@
+@model HelpDesk.Mvc.Models.Ticket
+@{
+    ViewData["Title"] = "Edit Ticket";
+}
+
+<h1>Edit Ticket</h1>
+
+<form asp-action="Edit" method="post" class="col-md-6">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CreatedDate" />
+    <input type="hidden" asp-for="RaisedBy" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">Raised By</label>
+        <input class="form-control" value="@Model.RaisedBy" disabled />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Priority" class="form-label"></label>
+        <select asp-for="Priority" asp-items="ViewBag.PriorityOptions" class="form-select"></select>
+        <span asp-validation-for="Priority" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" asp-items="ViewBag.StatusOptions" class="form-select"></select>
+        @if (!(bool)(ViewBag.IsAdmin ?? false))
+        {
+            <div class="form-text">You can only move your own tickets to <strong>Closed</strong>.</div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>

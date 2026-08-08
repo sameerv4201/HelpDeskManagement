@@ -1,0 +1,53 @@
+@model List<HelpDesk.Mvc.Models.Ticket>
+@{
+    ViewData["Title"] = "Filter Tickets by Status";
+}
+
+<h1>Filter Tickets by Status</h1>
+
+<form asp-action="FilterByStatus" method="get" class="row g-3 mb-4">
+    <div class="col-auto">
+        <select name="status" class="form-select" asp-items="ViewBag.StatusOptions">
+            <option value="">-- Select Status --</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+</form>
+
+@if (ViewBag.SelectedStatus != null)
+{
+    if (Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Raised By</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td>@ticket.Id</td>
+                    <td>@ticket.Title</td>
+                    <td>@ticket.Priority</td>
+                    <td>@ticket.Status</td>
+                    <td>@ticket.RaisedBy</td>
+                    <td><a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@ticket.Id">Details</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No tickets found for status "@ViewBag.SelectedStatus".</p>
+    }
+}

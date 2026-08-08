@@ -1,0 +1,50 @@
+@model HelpDesk.Mvc.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Dashboard</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p class="text-muted">Showing totals across every ticket in the system.</p>
+}
+else
+{
+    <p class="text-muted">Showing totals for tickets you've raised.</p>
+}
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Tickets</h5>
+                <p class="card-text display-4">@Model.TotalTickets</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Open Tickets</h5>
+                <p class="card-text display-4">@Model.OpenTickets</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">In Progress</h5>
+                <p class="card-text display-4">@Model.InProgressTickets</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Closed Tickets</h5>
+                <p class="card-text display-4">@Model.ClosedTickets</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+@model List<HelpDesk.Mvc.Models.Ticket>
+@{
+    ViewData["Title"] = "My Tickets";
+}
+
+<h1>My Tickets</h1>
+<p>
+    <a class="btn btn-primary" asp-action="Create">Raise New Ticket</a>
+</p>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Created Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var ticket in Model)
+    {
+        <tr>
+            <td>@ticket.Id</td>
+            <td>@ticket.Title</td>
+            <td>@ticket.Priority</td>
+            <td>@ticket.Status</td>
+            <td>@ticket.CreatedDate.ToString("g")</td>
+            <td>
+                <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@ticket.Id">Details</a>
+                <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@ticket.Id">Edit</a>
+
+                @if (ticket.Status != "Closed")
+                {
+                    <form asp-action="CloseTicket" asp-route-id="@ticket.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-success">Close</button>
+                    </form>
+                }
+
+                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">You haven't raised any tickets yet.</p>
+}

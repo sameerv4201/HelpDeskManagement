@@ -1,0 +1,76 @@
+@model List<HelpDesk.Mvc.Models.Ticket>
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<h1>Admin Panel</h1>
+<p class="text-muted">Full control over every ticket in the system.</p>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Raised By</th>
+            <th>Created Date</th>
+            <th style="min-width: 340px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var ticket in Model)
+    {
+        var badgeClass = ticket.Status switch
+        {
+            "Open" => "bg-warning text-dark",
+            "In Progress" => "bg-info text-dark",
+            "Closed" => "bg-success",
+            _ => "bg-secondary"
+        };
+
+        <tr>
+            <td>@ticket.Id</td>
+            <td>@ticket.Title</td>
+            <td>@ticket.Priority</td>
+            <td><span class="badge @badgeClass">@ticket.Status</span></td>
+            <td>@ticket.RaisedBy</td>
+            <td>@ticket.CreatedDate.ToString("g")</td>
+            <td>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Ticket" asp-action="Details" asp-route-id="@ticket.Id">View</a>
+
+                @if (ticket.Status != "In Progress")
+                {
+                    <form asp-action="SetInProgress" asp-route-id="@ticket.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-info">In Progress</button>
+                    </form>
+                }
+
+                @if (ticket.Status != "Closed")
+                {
+                    <form asp-action="SetClosed" asp-route-id="@ticket.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-success">Close</button>
+                    </form>
+                }
+
+                @if (ticket.Status != "Open")
+                {
+                    <form asp-action="Reopen" asp-route-id="@ticket.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-warning">Reopen</button>
+                    </form>
+                }
+
+                <form asp-action="Delete" asp-route-id="@ticket.Id" method="post" class="d-inline"
+                      onsubmit="return confirm('Delete ticket #@ticket.Id? This cannot be undone.');">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No tickets have been raised yet.</p>
+}
