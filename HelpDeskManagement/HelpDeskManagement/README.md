@@ -12,26 +12,7 @@ A company receives support requests from employees regarding software, hardware,
 
 ---
 
-## Table of Contents
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [1. Clone & Restore](#1-clone--restore)
-  - [2. Apply Database Migrations](#2-apply-database-migrations)
-  - [3. Trust the Local Dev Certificate](#3-trust-the-local-dev-certificate-optional)
-  - [4. Run the API](#4-run-the-api)
-  - [5. Run the MVC App](#5-run-the-mvc-app)
-  - [6. Run the Tests](#6-run-the-tests)
-- [Roles & Access Control](#roles--access-control)
-- [API Reference](#api-reference)
-- [Ticket Field Reference](#ticket-field-reference)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
 
