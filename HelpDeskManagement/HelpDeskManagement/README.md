@@ -45,22 +45,6 @@ A company receives support requests from employees regarding software, hardware,
 - Clean separation of concerns: **Repository Pattern** in the API, **Service Layer** in the MVC app — MVC never touches the ticket database directly.
 - **Unit tested** controller logic using xUnit + Moq, with the repository layer fully mocked (no SQL Server dependency in tests).
 
-## Architecture
-
-```
-┌─────────────────┐        HTTP (JSON)        ┌──────────────────┐        EF Core        ┌────────────────┐
-│   HelpDesk.Mvc   │ ────────────────────────▶ │   HelpDesk.Api   │ ─────────────────────▶ │  SQL Server     │
-│  (Razor Views,   │ ◀──────────────────────── │ (REST endpoints, │ ◀───────────────────── │  HelpDeskDb     │
-│  TicketService,  │      Ticket data only      │  Repository      │      Ticket table       │  (Tickets)      │
-│  Identity/Auth)  │                            │  Pattern)         │                        └────────────────┘
-└─────────────────┘                            └──────────────────┘
-        │
-        │ EF Core (separate context)
-        ▼
-┌────────────────────┐
-│  HelpDeskIdentityDb │   ← Login/roles only (AspNetUsers, AspNetRoles, ...)
-└────────────────────┘
-```
 
 `HelpDesk.Mvc` controllers never query the ticket database directly — all ticket reads/writes go through `TicketService` (an `HttpClient` wrapper) to `HelpDesk.Api`. Login and role data live in a completely separate database so authentication concerns stay decoupled from ticket data.
 
@@ -178,21 +162,6 @@ dotnet test
 
 All controller tests run against a mocked `ITicketRepository` — no database connection required.
 
-## Roles & Access Control
-
-| Capability | User | Admin |
-|---|:---:|:---:|
-| Raise a new ticket | ✅ | ✅ |
-| View own tickets | ✅ | ✅ |
-| View **all** tickets | ❌ | ✅ |
-| Edit own ticket (title/description/priority) | ✅ | ✅ |
-| Close own ticket | ✅ | ✅ |
-| Set any ticket to **In Progress** | ❌ | ✅ |
-| Reopen a ticket | ❌ | ✅ |
-| Delete own ticket | ✅ | ✅ |
-| Delete **any** ticket | ❌ | ✅ |
-
-New accounts created via `/Account/Register` are assigned the `User` role automatically. The `Admin` role is seeded once on first application startup and can only be granted manually (e.g. via the database) afterward.
 
 ## API Reference
 
